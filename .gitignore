@@ -1,0 +1,8 @@
+*.exe
+.idea/
+
+# Ignores cmake-build-debug content, excluding folder and 'datos.txt'
+/cmake-build-debug/CMakeFiles/
+!cmake-build-debug/
+cmake-build-debug/*
+!/cmake-build-debug/datos.txt

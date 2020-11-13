@@ -1,3 +1,0 @@
-/Users/Nany/Documents/IEST/Tercer Semestre/Estructura de Datos/Parcial 2/calculadora_ds/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/Users/Nany/Documents/IEST/Tercer Semestre/Estructura de Datos/Parcial 2/calculadora_ds/cmake-build-debug/CMakeFiles/edit_cache.dir
-/Users/Nany/Documents/IEST/Tercer Semestre/Estructura de Datos/Parcial 2/calculadora_ds/cmake-build-debug/CMakeFiles/calculadora_ds.dir
