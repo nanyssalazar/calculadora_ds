@@ -1,4 +1,7 @@
 *.exe
 .idea/
 /cmake-build-debug/CMakeFiles/
-/cmake-build-debug/
+!cmake-build-debug/
+cmake-build-debug/*
+!/cmake-build-debug/datos.txt
+
