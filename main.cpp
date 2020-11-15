@@ -45,7 +45,7 @@ int main(){
                     raiz = aux; // AQUI ENTRA
                     break;
                 }
-                // Si es una operación mas importante (mul y division)
+                    // Si es una operación mas importante (mul y division)
                 else if (aux->valor>=ptr->valor){
                     // Si a la derecha esta un numero
                     if(ptr->der!=NULL){
