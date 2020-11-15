@@ -88,12 +88,18 @@ int main(){
 
 void asigna_valor(nodo *ptrNodo){
     // Default
-    ptrNodo->valor = 3;
-    if (ptrNodo->contenido == "+" or ptrNodo->contenido =="-"){
-        ptrNodo->valor = 1;
-    }
-    if (ptrNodo->contenido =="*" or ptrNodo->contenido=="/"){
-        ptrNodo->valor = 2;
+    char contenido = ptrNodo -> contenido[0];
+    switch(contenido){
+        case '+':
+        case '-':
+            ptrNodo -> valor = 1;
+            break;
+        case '*':
+        case '/':
+            ptrNodo -> valor = 2;
+            break;
+        default:
+            ptrNodo -> valor = 3;
     }
     cout << "Valor: " << ptrNodo->valor << " ";
 }
