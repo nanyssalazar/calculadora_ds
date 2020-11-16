@@ -25,43 +25,34 @@ int main(){
         asigna_valor(aux);
         aux->izq=NULL; aux->der=NULL;
 
-        if (raiz==NULL){
+        if(raiz==NULL){
             raiz=aux;
         }
         else{
             ptr = raiz;
-            while (ptr != NULL){
-                if (aux -> valor == 1 or (raiz -> izq == NULL and raiz -> der == NULL)){
-                    if(raiz -> der == NULL){
-                        aux -> izq = raiz;
-                        raiz = aux;
-                    }else if(raiz -> der -> valor == 2 or (raiz -> der -> valor == 3 and aux -> valor >= raiz -> valor)){
-                        aux -> izq = ptr -> der;
-                        ptr -> der = aux;
-                    }else{
-                        aux -> izq = raiz;
-                        raiz = aux;
-                    }
-                    break;
+            if(aux -> valor == 1 or (raiz -> izq == NULL and raiz -> der == NULL)){
+                if(raiz -> der == NULL){
+                    aux -> izq = raiz;
+                    raiz = aux;
+                }else if(raiz -> der -> valor == 2 or (raiz -> der -> valor == 3 and aux -> valor >= raiz -> valor)){
+                    aux -> izq = ptr -> der;
+                    ptr -> der = aux;
+                }else{
+                    aux -> izq = raiz;
+                    raiz = aux;
                 }
-                else if(aux -> valor >= ptr -> valor){
+            }else{
+                while(ptr != NULL){
                     if(ptr -> der == NULL){
                         ptr -> der = aux;
                         break;
-                    }
-                    else if(ptr -> der -> valor == 3){
+                    }else if(ptr -> der -> valor == 3){
                         aux -> izq = ptr -> der;
                         ptr -> der = aux;
                         break;
-                    }
-                    else{
+                    }else{
                         ptr = ptr -> der;
                     }
-                }
-                else{
-                    aux -> izq = ptr -> der;
-                    ptr -> der = aux;
-                    break;
                 }
             }
         }
