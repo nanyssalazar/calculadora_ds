@@ -2,7 +2,7 @@
 #include <fstream>
 using namespace std;
 
-struct nodo {
+struct nodo{
     string contenido;
     int valor;
     nodo *izq;
@@ -24,54 +24,35 @@ int main(){
         datos>>aux->contenido; cout<<aux->contenido<<" ";
         asigna_valor(aux);
         aux->izq=NULL; aux->der=NULL;
+
         if (raiz==NULL){
             raiz=aux;
-        } // aqui si va all lo anterior
+        }
         else{
-            ptr=raiz;
-            while (ptr!=NULL){
-                // Checo si el que cree es mayor al nodo ptr donde estoy
-
-                // Si la operacion esta dentro de un parentesis de (, entonces es caso especial
-                if ((raiz->izq== NULL and raiz->der== NULL) or aux->valor<2){
-                    if(raiz->der!=NULL) {
-                        if (raiz->der->valor == 2 or (raiz->der->valor == 3 and aux->valor >= raiz->valor)) {
-                            aux->izq = ptr->der; // DEBE ENTRAR AQUI EN EL CASO DE MENOR A DER DE RAIZ
+            ptr = raiz;
+            while (true){
+                if ((raiz -> izq == NULL and raiz -> der == NULL) or aux -> valor == 1){
+                    if(raiz->der != NULL) {
+                        if (raiz ->der -> valor == 2 or (raiz -> der -> valor == 3 and aux -> valor >= raiz -> valor)) {
+                            // DEBE ENTRAR AQUI EN EL CASO DE MENOR A DER DE RAIZ
+                            aux->izq = ptr->der;
                             ptr->der = aux;
                             break;
                         }
                     }
                     aux->izq = raiz;
-                    raiz = aux; // AQUI ENTRA
+                    raiz = aux;
                     break;
                 }
-                    // Si es una operación mas importante (mul y division)
-                else if (aux->valor>=ptr->valor){
-                    // Si a la derecha esta un numero
-                    if(ptr->der!=NULL){
-                        if(ptr->der->valor == 3){
-                            aux->izq = ptr->der; // DEBE ENTRAR AQUI EN EL CASO DE MENOR A DER DE RAIZ
-                            ptr->der = aux;
-                            break;
-                        }
-                    }
-                        // Para agregar el valor al final de las derechas
-                    else if (ptr->der==NULL) {
-                        ptr->der = aux;
-                        ptr = aux;
-                    }
-                    // para recorrer
-                    ptr=ptr->der;
-                }
                 else {
-                    aux->izq = ptr->der; // DEBE ENTRAR AQUI EN EL CASO DE MENOR A DER DE RAIZ
+                    aux->izq = ptr->der;
                     ptr->der = aux;
                     break;
                 }
-
             }
         }
     }
+
     cout<<endl;
     datos.close();
     cout<<"Recorrido preOrden: ";
