@@ -30,23 +30,36 @@ int main(){
         }
         else{
             ptr = raiz;
-            while (true){
+            while (ptr != NULL){
                 if ((raiz -> izq == NULL and raiz -> der == NULL) or aux -> valor == 1){
-                    if(raiz->der != NULL) {
-                        if (raiz ->der -> valor == 2 or (raiz -> der -> valor == 3 and aux -> valor >= raiz -> valor)) {
-                            // DEBE ENTRAR AQUI EN EL CASO DE MENOR A DER DE RAIZ
-                            aux->izq = ptr->der;
-                            ptr->der = aux;
+                    if(raiz->der != NULL){
+                        if (raiz -> der -> valor == 2 or (raiz -> der -> valor == 3 and aux -> valor >= raiz -> valor)){
+                            aux -> izq = ptr -> der;
+                            ptr -> der = aux;
                             break;
                         }
                     }
-                    aux->izq = raiz;
+                    aux -> izq = raiz;
                     raiz = aux;
                     break;
                 }
-                else {
-                    aux->izq = ptr->der;
-                    ptr->der = aux;
+                else if(aux -> valor >= ptr -> valor){
+                    if(ptr -> der == NULL){
+                        ptr -> der = aux;
+                        break;
+                    }
+                    else if(ptr -> der -> valor == 3){
+                        aux -> izq = ptr -> der;
+                        ptr -> der = aux;
+                        break;
+                    }
+                    else{
+                        ptr = ptr -> der;
+                    }
+                }
+                else{
+                    aux -> izq = ptr -> der;
+                    ptr -> der = aux;
                     break;
                 }
             }
