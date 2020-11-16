@@ -31,16 +31,17 @@ int main(){
         else{
             ptr = raiz;
             while (ptr != NULL){
-                if ((raiz -> izq == NULL and raiz -> der == NULL) or aux -> valor == 1){
-                    if(raiz->der != NULL){
-                        if (raiz -> der -> valor == 2 or (raiz -> der -> valor == 3 and aux -> valor >= raiz -> valor)){
-                            aux -> izq = ptr -> der;
-                            ptr -> der = aux;
-                            break;
-                        }
+                if (aux -> valor == 1 or (raiz -> izq == NULL and raiz -> der == NULL)){
+                    if(raiz -> der == NULL){
+                        aux -> izq = raiz;
+                        raiz = aux;
+                    }else if(raiz -> der -> valor == 2 or (raiz -> der -> valor == 3 and aux -> valor >= raiz -> valor)){
+                        aux -> izq = ptr -> der;
+                        ptr -> der = aux;
+                    }else{
+                        aux -> izq = raiz;
+                        raiz = aux;
                     }
-                    aux -> izq = raiz;
-                    raiz = aux;
                     break;
                 }
                 else if(aux -> valor >= ptr -> valor){
@@ -81,7 +82,7 @@ int main(){
 }
 
 void asigna_valor(nodo *ptrNodo){
-    // Default
+    // str a char para efectuar switch
     char contenido = ptrNodo -> contenido[0];
     switch(contenido){
         case '+':
