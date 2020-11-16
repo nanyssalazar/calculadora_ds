@@ -25,10 +25,6 @@ int main(){
         asigna_valor(aux);
         aux->izq=NULL; aux->der=NULL;
         if (raiz==NULL){
-            if(aux->valor==4){
-                datos >> aux->contenido;
-                asigna_valor(aux);
-            }
             raiz=aux;
         } // aqui si va all lo anterior
         else{
@@ -37,56 +33,27 @@ int main(){
                 // Checo si el que cree es mayor al nodo ptr donde estoy
 
                 // Si la operacion esta dentro de un parentesis de (, entonces es caso especial
-                if (raiz->izq== NULL or raiz->der== NULL or aux->valor<3){
+                if ((raiz->izq== NULL and raiz->der== NULL) or aux->valor<2){
                     if(raiz->der!=NULL) {
-                        if (raiz->der->valor == 3 or (raiz->der->valor == 5 and aux->valor >= raiz->valor)) {
+                        if (raiz->der->valor == 2 or (raiz->der->valor == 3 and aux->valor >= raiz->valor)) {
                             aux->izq = ptr->der; // DEBE ENTRAR AQUI EN EL CASO DE MENOR A DER DE RAIZ
                             ptr->der = aux;
                             break;
                         }
                     }
-                    if(aux->valor==1){
-                        // Si se tiene un signo un despues parentesis )
-                        break;
-                    }
-                    if (aux->valor==4){
-                        //if (ptr->der!=NULL){
-                        if ((ptr->der==NULL or aux->valor>ptr->der->valor) and ptr->valor==5) {
-                                aux->contenido = "*";
-                                asigna_valor(aux);
-                                continue;
-                            //}
-                        }
-                        else{
-                            // SE PUEDE SUSTITUIR POR UN BREAK
-                            break;
-                        }
-                    }
                     aux->izq = raiz;
                     raiz = aux; // AQUI ENTRA
-                    ptr = ptr->der;
-                }
-                else if(aux->valor==4){
-                    // Si se tiene un numero antes de parentesis
-                    if (ptr->der!=NULL){
-                        if (aux->valor>ptr->der->valor){
-                            aux->contenido = "*";
-                            asigna_valor(aux);
-                            continue;
-                        }
-                    }
-                    else{
-                       // SE PUEDE SUSTITUIR POR UN BREAK
-                        break;
-                    }
+                    break;
                 }
                     // Si es una operación mas importante (mul y division)
                 else if (aux->valor>=ptr->valor){
                     // Si a la derecha esta un numero
-                    if(ptr->der->valor == 5){
-                        aux->izq = ptr->der; // DEBE ENTRAR AQUI EN EL CASO DE MENOR A DER DE RAIZ
-                        ptr->der = aux;
-                        break;
+                    if(ptr->der!=NULL){
+                        if(ptr->der->valor == 3){
+                            aux->izq = ptr->der; // DEBE ENTRAR AQUI EN EL CASO DE MENOR A DER DE RAIZ
+                            ptr->der = aux;
+                            break;
+                        }
                     }
                         // Para agregar el valor al final de las derechas
                     else if (ptr->der==NULL) {
@@ -121,18 +88,18 @@ int main(){
 
 void asigna_valor(nodo *ptrNodo){
     // Default
-    ptrNodo->valor = 5;
-    if (ptrNodo->contenido==")"){
-        ptrNodo->valor = 1;
-    }
-    if (ptrNodo->contenido == "+" or ptrNodo->contenido =="-"){
-        ptrNodo->valor = 2;
-    }
-    if (ptrNodo->contenido =="*" or ptrNodo->contenido=="/"){
-        ptrNodo->valor = 3;
-    }
-    if (ptrNodo->contenido=="("){
-        ptrNodo->valor = 4;
+    char contenido = ptrNodo -> contenido[0];
+    switch(contenido){
+        case '+':
+        case '-':
+            ptrNodo -> valor = 1;
+            break;
+        case '*':
+        case '/':
+            ptrNodo -> valor = 2;
+            break;
+        default:
+            ptrNodo -> valor = 3;
     }
     cout << "Valor: " << ptrNodo->valor << " ";
 }
