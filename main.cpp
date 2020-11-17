@@ -13,6 +13,10 @@ void preOrden(nodo *ptrNodo);
 void inOrden(nodo *ptrNodo);
 void postOrden(nodo *ptrNodo);
 void asigna_tipo(nodo *ptrNodo);
+void replaceNodo(int contenido, nodo *ptrNodo);
+int toInt(string s);
+int digitos;
+int resultado;
 
 int main(){
     ifstream datos("datos.txt");
@@ -77,9 +81,9 @@ int main(){
     cout<<"Recorrido inOrden: ";
     inOrden(raiz);
     cout<<endl;
-    cout<<"Recorrido postOrden: ";
-    postOrden(raiz);
-    cout<<endl;
+    cout<<"Resultado con recorrido postOrden: ";
+    while(raiz -> izq && raiz -> der){postOrden(raiz);}
+    cout << raiz -> contenido;
     return 0;
 }
 
@@ -98,7 +102,6 @@ void asigna_tipo(nodo *ptrNodo){
         default:
             ptrNodo -> tipo = 3;
     }
-    cout << "Valor: " << ptrNodo->tipo << " ";
 }
 
 void preOrden(nodo *ptrNodo){
@@ -120,8 +123,50 @@ void inOrden(nodo *ptrNodo){
 
 void postOrden(nodo *ptrNodo){
     if (ptrNodo!=NULL) {
-        postOrden( ptrNodo->izq );
-        postOrden( ptrNodo->der );
-        cout<<ptrNodo->contenido<<" ";
+        postOrden(ptrNodo->izq);
+        postOrden(ptrNodo->der);
+        // cuenta digitos
+        if(ptrNodo -> tipo == 3){digitos++;}
+        // si en el recorrido se encuentra un operador seguido de dos digitos
+        else if(digitos >= 2){
+            int izq = toInt(ptrNodo->izq->contenido);
+            int der = toInt(ptrNodo->der->contenido);
+            // se hace la operacion con las hojas del nodo
+            switch(ptrNodo -> contenido[0]){
+                case '*':
+                    resultado = izq * der;
+                    replaceNodo(resultado, ptrNodo);
+                    break;
+                case '+':
+                    resultado = izq + der;
+                    replaceNodo(resultado, ptrNodo);
+                    break;
+                case '-':
+                    resultado = izq - der;
+                    replaceNodo(resultado, ptrNodo);
+                    break;
+                case '/':
+                    if(!ptrNodo -> der){resultado = izq / der;}
+                    else{resultado = der / izq;}
+                    replaceNodo(resultado, ptrNodo);
+                    break;
+            }
+            //reinicia el contador
+            digitos = 0;
+        }
     }
+}
+
+// convierte strings a integers
+int toInt(string s){
+    int a;
+    try{ a = stoi(s); } catch (...){}
+    return a;
+}
+
+// reemplaza el nodo
+void replaceNodo(int contenido, nodo *ptrNodo){
+    ptrNodo -> contenido = to_string(contenido);
+    asigna_tipo(ptrNodo);
+    ptrNodo -> izq = NULL; ptrNodo -> der = NULL;
 }
