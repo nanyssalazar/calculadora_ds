@@ -43,23 +43,23 @@ int main(){
         }else{
             ptr = raiz;
             // si es suma, resta o la raiz no tiene elementos a los lados
-            if(aux -> tipo == 1 or (!raiz -> izq and !raiz -> der)){
+            if(aux -> tipo < 3 or (!raiz -> izq and !raiz -> der)){
                 raizDer = raiz -> der;
                 // si hay elemento a la derecha de la raiz
-                /*if(raizDer and raizDer -> tipo == 3 and raiz -> tipo == 1 and aux->tipo== 2){
+                if(raizDer and raizDer -> tipo == 3 and raiz -> tipo == 1 and aux->tipo== 2){
                     aux -> izq = ptr -> der; // este if se puede comentar
                     ptr -> der = aux;
-                }else{*/
+                }else{
                     aux -> izq = raiz;
                     raiz = aux;
-               // }
+               }
             }else{
                 while(ptr){
                     if(!ptr -> der){
                         ptr -> der = aux;
                         break;
                     // si el elemento a la derecha es un numero
-                    }else if(ptr -> der -> tipo == 3){
+                    }else if(ptr -> der -> tipo == 3 and aux->tipo>ptr->der->tipo){
                         aux -> izq = ptr -> der;
                         ptr -> der = aux;
                         break;
