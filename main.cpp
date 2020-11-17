@@ -145,7 +145,8 @@ void postOrden(nodo *ptrNodo){
                     replaceNodo(resultado, ptrNodo);
                     break;
                 case '/':
-                    resultado = izq / der;
+                    if(!ptrNodo -> der){resultado = izq / der;}
+                    else{resultado = der / izq;}
                     replaceNodo(resultado, ptrNodo);
                     break;
             }
