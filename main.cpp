@@ -13,6 +13,8 @@ void preOrden(nodo *ptrNodo);
 void inOrden(nodo *ptrNodo);
 void postOrden(nodo *ptrNodo);
 void asigna_tipo(nodo *ptrNodo);
+void replaceNodo(float contenido, nodo *ptrNodo);
+float resultado;
 
 int main(){
     ifstream datos("datos.txt");
@@ -41,23 +43,23 @@ int main(){
         }else{
             ptr = raiz;
             // si es suma, resta o la raiz no tiene elementos a los lados
-            if(aux -> tipo == 1 or (!raiz -> izq and !raiz -> der)){
+            if(aux -> tipo < 3 or (!raiz -> izq and !raiz -> der)){
                 raizDer = raiz -> der;
                 // si hay elemento a la derecha de la raiz
-                if(raizDer and (raizDer -> tipo == 2 or (raizDer -> tipo == 3 and raiz -> tipo == 1))){
-                    aux -> izq = ptr -> der;
+                if(raizDer and raizDer -> tipo == 3 and raiz -> tipo == 1 and aux->tipo== 2){
+                    aux -> izq = ptr -> der; // este if se puede comentar
                     ptr -> der = aux;
                 }else{
                     aux -> izq = raiz;
                     raiz = aux;
-                }
+               }
             }else{
                 while(ptr){
                     if(!ptr -> der){
                         ptr -> der = aux;
                         break;
                     // si el elemento a la derecha es un numero
-                    }else if(ptr -> der -> tipo == 3){
+                    }else if(ptr -> der -> tipo == 3 and aux->tipo>ptr->der->tipo){
                         aux -> izq = ptr -> der;
                         ptr -> der = aux;
                         break;
@@ -77,9 +79,9 @@ int main(){
     cout<<"Recorrido inOrden: ";
     inOrden(raiz);
     cout<<endl;
-    cout<<"Recorrido postOrden: ";
+    cout<<"Resultado con recorrido postOrden: ";
     postOrden(raiz);
-    cout<<endl;
+    cout << raiz -> contenido;
     return 0;
 }
 
@@ -98,7 +100,6 @@ void asigna_tipo(nodo *ptrNodo){
         default:
             ptrNodo -> tipo = 3;
     }
-    cout << "Valor: " << ptrNodo->tipo << " ";
 }
 
 void preOrden(nodo *ptrNodo){
@@ -119,8 +120,38 @@ void inOrden(nodo *ptrNodo){
 
 void postOrden(nodo *ptrNodo){
     if (ptrNodo!=NULL) {
-        postOrden( ptrNodo->izq );
-        postOrden( ptrNodo->der );
-        cout<<ptrNodo->contenido<<" ";
+        postOrden(ptrNodo->izq);
+        postOrden(ptrNodo->der);
+        // si es un operador y sus hojas son digitos
+        if(ptrNodo -> tipo != 3 and ptrNodo -> izq -> tipo == 3 and ptrNodo -> der -> tipo == 3) {
+            float izq = stof(ptrNodo->izq->contenido); float der = stof(ptrNodo->der->contenido);
+            // se hace la operacion con las hojas del nodo
+            switch (ptrNodo->contenido[0]) {
+                case '*':
+                    resultado = izq * der;
+                    replaceNodo(resultado, ptrNodo);
+                    break;
+                case '+':
+                    resultado = izq + der;
+                    replaceNodo(resultado, ptrNodo);
+                    break;
+                case '-':
+                    resultado = izq - der;
+                    replaceNodo(resultado, ptrNodo);
+                    break;
+                case '/':
+                    if (!ptrNodo->der->der) { resultado = izq / der; }
+                    else { resultado = der / izq; }
+                    replaceNodo(resultado, ptrNodo);
+                    break;
+            }
+        }
     }
+}
+
+// reemplaza el nodo
+void replaceNodo(float contenido, nodo *ptrNodo){
+    ptrNodo -> contenido = to_string(contenido);
+    asigna_tipo(ptrNodo);
+    ptrNodo -> izq = NULL; ptrNodo -> der = NULL;
 }
