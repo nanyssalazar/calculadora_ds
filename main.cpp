@@ -2,7 +2,7 @@
 #include <fstream>
 using namespace std;
 
-struct nodo {
+struct nodo{
     string contenido;
     int tipo;
     nodo *izq;
@@ -12,53 +12,33 @@ struct nodo {
 void preOrden(nodo *ptrNodo);
 void inOrden(nodo *ptrNodo);
 void postOrden(nodo *ptrNodo);
-void asigna_valor(nodo *ptrNodo);
+void asigna_tipo(nodo *ptrNodo);
 
-
-int main() {
-    string operacion;
-    bool add, exists;
-    int i(0);
-    string operadores [4] = {"+","-","*","/"};
-
+int main(){
     ifstream datos("datos.txt");
     nodo *raiz,*ptr,*aux, *raizDer;
     raiz = NULL;
-    cout << "Datos leidos: ";
-    // se leen los datos como un string entero
-    while (!datos.eof()) {
-        datos >> operacion;
-        cout << operacion << endl;
-    }
-    // se crea un array lenght del string
-    string array[operacion.length()];
-    // se agrega cada char al array
-    for (int i=0; i<operacion.length(); i++){
-        array[i] = operacion[i];
-    }
-    // recorra la operaciones entera
-    while (i < operacion.length()) {
+    char dataChar;
+    datos >> dataChar;
+    string concatStr;
+    cout<<"Datos leidos: ";
+
+    while (!datos.eof()){
         aux = new nodo;
-        // verifica si se trata de un operador o no
-        exists = find(begin(operadores), end(operadores), array[i]) != end(operadores);
-        // si es un numero
-        while (!exists and i < operacion.length()) {
-            aux -> contenido.append(array[i]); // se agrega al contenido del nodo creado
-            i++; // recorre el string
-            exists = find(begin(operadores), end(operadores), array[i]) != end(operadores); // verifica
-            if(exists){ i--; }// si es un operador, se resta a i para que en el sig ciclo se cree el nodo de ese operador
-            add = true; // verifica si se añadio un numero
-        }
-        // para que se agregen los operadores
-        if (!add){ aux -> contenido = array[i]; }
-        asigna_valor(aux);
-        aux -> izq = NULL;
-        aux -> der = NULL;
+        // concatena chars hasta que encuentre un operador o se termine de leer el archivo
+        concatStr.clear();
+        do{
+            concatStr += dataChar;
+            datos >> dataChar;
+        }while(isdigit(dataChar) and isdigit(concatStr[0]) and !datos.eof());
+
+        aux -> contenido = concatStr; cout << aux -> contenido << " ";
+        asigna_tipo(aux);
+        aux -> izq= NULL; aux -> der= NULL;
 
         if(!raiz){
             raiz=aux;
-        }
-        else{
+        }else{
             ptr = raiz;
             // si es suma, resta o la raiz no tiene elementos a los lados
             if(aux -> tipo == 1 or (!raiz -> izq and !raiz -> der)){
@@ -81,16 +61,13 @@ int main() {
                         aux -> izq = ptr -> der;
                         ptr -> der = aux;
                         break;
-                    } else {
-                        ptr = ptr->der;
+                    }else{
+                        ptr = ptr -> der;
                     }
                 }
             }
         }
-        i++;
-        add = false;
     }
-
 
     cout<<endl;
     datos.close();
@@ -106,7 +83,7 @@ int main() {
     return 0;
 }
 
-void asigna_valor(nodo *ptrNodo){
+void asigna_tipo(nodo *ptrNodo){
     // str a char para efectuar switch
     char contenido = ptrNodo -> contenido[0];
     switch(contenido){
