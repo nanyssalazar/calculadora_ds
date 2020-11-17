@@ -18,8 +18,7 @@ void asigna_valor(nodo *ptrNodo);
 int main() {
     string operacion;
     int i(0);
-    bool x, exists2, exists;
-    string operadores [10] = {"0","1","2","3","4","5","6","7","8","9"};
+    bool x, exists2;
     string operadores2 [4] = {"+","-","*","/"};
     ifstream datos("datos.txt");
     nodo *raiz, *ptr, *aux;
@@ -27,7 +26,7 @@ int main() {
     cout << "Datos leidos: ";
     while (!datos.eof()) {
         datos >> operacion;
-        cout << operacion;
+        cout << operacion << endl;
     }
     string array[operacion.length()];
     for (i=0;i<operacion.length();i++){
@@ -36,21 +35,18 @@ int main() {
     i=0;
     while (i < operacion.length()) {
         aux = new nodo;
-        cout << array[i];
-        exists = find(begin(operadores), end(operadores), array[i+1]) != std::end(operadores);
-        exists2 = find(begin(operadores2), end(operadores2), array[i]) != std::end(operadores2);
-        while (exists and i<operacion.length() and !exists2) {
+        exists2 = find(begin(operadores2), end(operadores2), array[i]) != end(operadores2);
+        while (!exists2 and i<operacion.length()) {
             aux->contenido.append(array[i]);
             i++;
-            exists = find(begin(operadores), end(operadores), array[i]) != std::end(operadores);
-            if(!exists){
+            exists2 = find(begin(operadores2), end(operadores2), array[i]) != end(operadores2);
+            if(exists2){
                 i--;
             }
             x=true;
         }
         if (!x){
             aux->contenido = array[i];}
-        cout << aux->contenido << " ";
         asigna_valor(aux);
         aux->izq = NULL;
         aux->der = NULL;
