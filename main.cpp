@@ -9,8 +9,6 @@ struct nodo{
     nodo *der;
 };
 
-void preOrden(nodo *ptrNodo);
-void inOrden(nodo *ptrNodo);
 void postOrden(nodo *ptrNodo);
 void asigna_tipo(nodo *ptrNodo);
 void replaceNodo(float contenido, nodo *ptrNodo);
@@ -23,7 +21,7 @@ int main(){
     char dataChar;
     datos >> dataChar;
     string concatStr;
-    cout<<"Datos leidos: ";
+    cout << endl << "Datos leidos: ";
 
     while (!datos.eof()){
         aux = new nodo;
@@ -71,17 +69,11 @@ int main(){
         }
     }
 
-    cout<<endl;
+    cout << endl;
     datos.close();
-    cout<<"Recorrido preOrden: ";
-    preOrden(raiz);
-    cout<<endl;
-    cout<<"Recorrido inOrden: ";
-    inOrden(raiz);
-    cout<<endl;
-    cout<<"Resultado con recorrido postOrden: ";
+    cout << "Resultado con recorrido postOrden: ";
     postOrden(raiz);
-    cout << raiz -> contenido;
+    cout << raiz -> contenido << endl;
     return 0;
 }
 
@@ -99,22 +91,6 @@ void asigna_tipo(nodo *ptrNodo){
             break;
         default:
             ptrNodo -> tipo = 3;
-    }
-}
-
-void preOrden(nodo *ptrNodo){
-    if (ptrNodo!=NULL){
-        cout<<ptrNodo->contenido<<" ";
-        preOrden( ptrNodo->izq );
-        preOrden( ptrNodo->der );
-    }
-}
-
-void inOrden(nodo *ptrNodo){
-    if (ptrNodo!=NULL) {
-        inOrden(ptrNodo->izq);
-        cout<<ptrNodo->contenido<<" ";
-        inOrden(ptrNodo->der);
     }
 }
 
