@@ -80,7 +80,7 @@ int main(){
     inOrden(raiz);
     cout<<endl;
     cout<<"Resultado con recorrido postOrden: ";
-    while(raiz -> izq && raiz -> der){postOrden(raiz);}
+    postOrden(raiz);
     cout << raiz -> contenido;
     return 0;
 }
