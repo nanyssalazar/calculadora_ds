@@ -12,23 +12,33 @@ struct nodo{
 void preOrden(nodo *ptrNodo);
 void inOrden(nodo *ptrNodo);
 void postOrden(nodo *ptrNodo);
-void asigna_valor(nodo *ptrNodo);
+void asigna_tipo(nodo *ptrNodo);
 
 int main(){
     ifstream datos("datos.txt");
     nodo *raiz,*ptr,*aux, *raizDer;
     raiz = NULL;
+    char dataChar;
+    datos >> dataChar;
+    string concatStr;
     cout<<"Datos leidos: ";
+
     while (!datos.eof()){
         aux = new nodo;
-        datos>>aux->contenido; cout<<aux->contenido<<" ";
-        asigna_valor(aux);
-        aux->izq=NULL; aux->der=NULL;
+        // concatena chars hasta que encuentre un operador o se termine de leer el archivo
+        concatStr.clear();
+        do{
+            concatStr += dataChar;
+            datos >> dataChar;
+        }while(isdigit(dataChar) and isdigit(concatStr[0]) and !datos.eof());
+
+        aux -> contenido = concatStr; cout << aux -> contenido << " ";
+        asigna_tipo(aux);
+        aux -> izq= NULL; aux -> der= NULL;
 
         if(!raiz){
             raiz=aux;
-        }
-        else{
+        }else{
             ptr = raiz;
             // si es suma, resta o la raiz no tiene elementos a los lados
             if(aux -> tipo == 1 or (!raiz -> izq and !raiz -> der)){
@@ -73,7 +83,7 @@ int main(){
     return 0;
 }
 
-void asigna_valor(nodo *ptrNodo){
+void asigna_tipo(nodo *ptrNodo){
     // str a char para efectuar switch
     char contenido = ptrNodo -> contenido[0];
     switch(contenido){
@@ -97,7 +107,6 @@ void preOrden(nodo *ptrNodo){
         preOrden( ptrNodo->izq );
         preOrden( ptrNodo->der );
     }
-
 }
 
 void inOrden(nodo *ptrNodo){
