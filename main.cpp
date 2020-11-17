@@ -2,7 +2,7 @@
 #include <fstream>
 using namespace std;
 
-struct nodo{
+struct nodo {
     string contenido;
     int tipo;
     nodo *izq;
@@ -17,39 +17,43 @@ void asigna_valor(nodo *ptrNodo);
 
 int main() {
     string operacion;
+    bool add, exists;
     int i(0);
-    bool x, exists2;
-    string operadores2 [4] = {"+","-","*","/"};
+    string operadores [4] = {"+","-","*","/"};
+
     ifstream datos("datos.txt");
     nodo *raiz,*ptr,*aux, *raizDer;
     raiz = NULL;
     cout << "Datos leidos: ";
+    // se leen los datos como un string entero
     while (!datos.eof()) {
         datos >> operacion;
         cout << operacion << endl;
     }
+    // se crea un array lenght del string
     string array[operacion.length()];
-    for (i=0;i<operacion.length();i++){
+    // se agrega cada char al array
+    for (int i=0; i<operacion.length(); i++){
         array[i] = operacion[i];
     }
-    i=0;
+    // recorra la operaciones entera
     while (i < operacion.length()) {
         aux = new nodo;
-        exists2 = find(begin(operadores2), end(operadores2), array[i]) != end(operadores2);
-        while (!exists2 and i<operacion.length()) {
-            aux->contenido.append(array[i]);
-            i++;
-            exists2 = find(begin(operadores2), end(operadores2), array[i]) != end(operadores2);
-            if(exists2){
-                i--;
-            }
-            x=true;
+        // verifica si se trata de un operador o no
+        exists = find(begin(operadores), end(operadores), array[i]) != end(operadores);
+        // si es un numero
+        while (!exists and i < operacion.length()) {
+            aux -> contenido.append(array[i]); // se agrega al contenido del nodo creado
+            i++; // recorre el string
+            exists = find(begin(operadores), end(operadores), array[i]) != end(operadores); // verifica
+            if(exists){ i--; }// si es un operador, se resta a i para que en el sig ciclo se cree el nodo de ese operador
+            add = true; // verifica si se añadio un numero
         }
-        if (!x){
-            aux->contenido = array[i];}
+        // para que se agregen los operadores
+        if (!add){ aux -> contenido = array[i]; }
         asigna_valor(aux);
-        aux->izq = NULL;
-        aux->der = NULL;
+        aux -> izq = NULL;
+        aux -> der = NULL;
 
         if(!raiz){
             raiz=aux;
@@ -84,7 +88,7 @@ int main() {
             }
         }
         i++;
-        x = false;
+        add = false;
     }
 
 
