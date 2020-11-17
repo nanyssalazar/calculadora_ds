@@ -13,10 +13,8 @@ void preOrden(nodo *ptrNodo);
 void inOrden(nodo *ptrNodo);
 void postOrden(nodo *ptrNodo);
 void asigna_tipo(nodo *ptrNodo);
-void replaceNodo(int contenido, nodo *ptrNodo);
-int toInt(string s);
-int digitos;
-int resultado;
+void replaceNodo(float contenido, nodo *ptrNodo);
+float resultado;
 
 int main(){
     ifstream datos("datos.txt");
@@ -124,14 +122,11 @@ void postOrden(nodo *ptrNodo){
     if (ptrNodo!=NULL) {
         postOrden(ptrNodo->izq);
         postOrden(ptrNodo->der);
-        // cuenta digitos
-        if(ptrNodo -> tipo == 3){digitos++;}
-        // si en el recorrido se encuentra un operador seguido de dos digitos
-        else if(digitos >= 2){
-            int izq = toInt(ptrNodo->izq->contenido);
-            int der = toInt(ptrNodo->der->contenido);
+        // si es un operador y sus hojas son digitos
+        if(ptrNodo -> tipo != 3 and ptrNodo -> izq -> tipo == 3 and ptrNodo -> der -> tipo == 3) {
+            float izq = stof(ptrNodo->izq->contenido); float der = stof(ptrNodo->der->contenido);
             // se hace la operacion con las hojas del nodo
-            switch(ptrNodo -> contenido[0]){
+            switch (ptrNodo->contenido[0]) {
                 case '*':
                     resultado = izq * der;
                     replaceNodo(resultado, ptrNodo);
@@ -145,26 +140,17 @@ void postOrden(nodo *ptrNodo){
                     replaceNodo(resultado, ptrNodo);
                     break;
                 case '/':
-                    if(!ptrNodo -> der -> der){resultado = izq / der;}
-                    else{resultado = der / izq;}
+                    if (!ptrNodo->der->der) { resultado = izq / der; }
+                    else { resultado = der / izq; }
                     replaceNodo(resultado, ptrNodo);
                     break;
             }
-            //reinicia el contador
-            digitos = 0;
         }
     }
 }
 
-// convierte strings a integers
-int toInt(string s){
-    int a;
-    try{ a = stoi(s); } catch (...){}
-    return a;
-}
-
 // reemplaza el nodo
-void replaceNodo(int contenido, nodo *ptrNodo){
+void replaceNodo(float contenido, nodo *ptrNodo){
     ptrNodo -> contenido = to_string(contenido);
     asigna_tipo(ptrNodo);
     ptrNodo -> izq = NULL; ptrNodo -> der = NULL;
