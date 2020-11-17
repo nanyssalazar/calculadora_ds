@@ -4,7 +4,7 @@ using namespace std;
 
 struct nodo{
     string contenido;
-    int valor;
+    int tipo;
     nodo *izq;
     nodo *der;
 };
@@ -21,7 +21,7 @@ int main() {
     bool x, exists2;
     string operadores2 [4] = {"+","-","*","/"};
     ifstream datos("datos.txt");
-    nodo *raiz, *ptr, *aux;
+    nodo *raiz,*ptr,*aux, *raizDer;
     raiz = NULL;
     cout << "Datos leidos: ";
     while (!datos.eof()) {
@@ -51,29 +51,31 @@ int main() {
         aux->izq = NULL;
         aux->der = NULL;
 
-        if (raiz == NULL) {
-            raiz = aux;
-        } else {
+        if(!raiz){
+            raiz=aux;
+        }
+        else{
             ptr = raiz;
-            if (aux->valor == 1 or (raiz->izq == NULL and raiz->der == NULL)) {
-                if (raiz->der == NULL) {
-                    aux->izq = raiz;
-                    raiz = aux;
-                } else if (raiz->der->valor == 2 or (raiz->der->valor == 3 and aux->valor >= raiz->valor)) {
-                    aux->izq = ptr->der;
-                    ptr->der = aux;
-                } else {
-                    aux->izq = raiz;
+            // si es suma, resta o la raiz no tiene elementos a los lados
+            if(aux -> tipo == 1 or (!raiz -> izq and !raiz -> der)){
+                raizDer = raiz -> der;
+                // si hay elemento a la derecha de la raiz
+                if(raizDer and (raizDer -> tipo == 2 or (raizDer -> tipo == 3 and raiz -> tipo == 1))){
+                    aux -> izq = ptr -> der;
+                    ptr -> der = aux;
+                }else{
+                    aux -> izq = raiz;
                     raiz = aux;
                 }
-            } else {
-                while (ptr != NULL) {
-                    if (ptr->der == NULL) {
-                        ptr->der = aux;
+            }else{
+                while(ptr){
+                    if(!ptr -> der){
+                        ptr -> der = aux;
                         break;
-                    } else if (ptr->der->valor == 3) {
-                        aux->izq = ptr->der;
-                        ptr->der = aux;
+                    // si el elemento a la derecha es un numero
+                    }else if(ptr -> der -> tipo == 3){
+                        aux -> izq = ptr -> der;
+                        ptr -> der = aux;
                         break;
                     } else {
                         ptr = ptr->der;
@@ -106,16 +108,16 @@ void asigna_valor(nodo *ptrNodo){
     switch(contenido){
         case '+':
         case '-':
-            ptrNodo -> valor = 1;
+            ptrNodo -> tipo = 1;
             break;
         case '*':
         case '/':
-            ptrNodo -> valor = 2;
+            ptrNodo -> tipo = 2;
             break;
         default:
-            ptrNodo -> valor = 3;
+            ptrNodo -> tipo = 3;
     }
-    cout << "Valor: " << ptrNodo->valor << " ";
+    cout << "Valor: " << ptrNodo->tipo << " ";
 }
 
 void preOrden(nodo *ptrNodo){
