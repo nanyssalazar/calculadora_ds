@@ -13,10 +13,8 @@ void preOrden(nodo *ptrNodo);
 void inOrden(nodo *ptrNodo);
 void postOrden(nodo *ptrNodo);
 void asigna_tipo(nodo *ptrNodo);
-void replaceNodo(int contenido, nodo *ptrNodo);
-int toInt(string s);
-int digitos;
-int resultado;
+void replaceNodo(float contenido, nodo *ptrNodo);
+float resultado;
 
 int main(){
     ifstream datos("datos.txt");
@@ -45,10 +43,10 @@ int main(){
         }else{
             ptr = raiz;
             // si es suma, resta o la raiz no tiene elementos a los lados
-            if(aux -> tipo < 2 or (!raiz -> izq and !raiz -> der)){
+            if(aux -> tipo == 1 or (!raiz -> izq and !raiz -> der)){
                 raizDer = raiz -> der;
                 // si hay elemento a la derecha de la raiz
-                if(raizDer and ((raizDer -> tipo == 3 and raiz -> tipo == 1))){
+                if(raizDer and (raizDer -> tipo == 2 or (raizDer -> tipo == 3 and raiz -> tipo == 1))){
                     aux -> izq = ptr -> der;
                     ptr -> der = aux;
                 }else{
@@ -110,7 +108,6 @@ void preOrden(nodo *ptrNodo){
         preOrden( ptrNodo->izq );
         preOrden( ptrNodo->der );
     }
-
 }
 
 void inOrden(nodo *ptrNodo){
@@ -125,14 +122,11 @@ void postOrden(nodo *ptrNodo){
     if (ptrNodo!=NULL) {
         postOrden(ptrNodo->izq);
         postOrden(ptrNodo->der);
-        // cuenta digitos
-        if(ptrNodo -> tipo == 3){digitos++;}
-        // si en el recorrido se encuentra un operador seguido de dos digitos
-        else if(digitos >= 2){
-            int izq = toInt(ptrNodo->izq->contenido);
-            int der = toInt(ptrNodo->der->contenido);
+        // si es un operador y sus hojas son digitos
+        if(ptrNodo -> tipo != 3 and ptrNodo -> izq -> tipo == 3 and ptrNodo -> der -> tipo == 3) {
+            float izq = stof(ptrNodo->izq->contenido); float der = stof(ptrNodo->der->contenido);
             // se hace la operacion con las hojas del nodo
-            switch(ptrNodo -> contenido[0]){
+            switch (ptrNodo->contenido[0]) {
                 case '*':
                     resultado = izq * der;
                     replaceNodo(resultado, ptrNodo);
@@ -146,8 +140,8 @@ void postOrden(nodo *ptrNodo){
                     replaceNodo(resultado, ptrNodo);
                     break;
                 case '/':
-                    if(!ptrNodo -> der){resultado = izq / der;}
-                    else{resultado = der / izq;}
+                    if (!ptrNodo->der->der) { resultado = izq / der; }
+                    else { resultado = der / izq; }
                     replaceNodo(resultado, ptrNodo);
                     break;
             }
@@ -165,7 +159,7 @@ int toInt(string s){
 }
 
 // reemplaza el nodo
-void replaceNodo(int contenido, nodo *ptrNodo){
+void replaceNodo(float contenido, nodo *ptrNodo){
     ptrNodo -> contenido = to_string(contenido);
     asigna_tipo(ptrNodo);
     ptrNodo -> izq = NULL; ptrNodo -> der = NULL;
