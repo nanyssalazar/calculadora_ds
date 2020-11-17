@@ -48,7 +48,7 @@ int main(){
             if(aux -> tipo == 1 or (!raiz -> izq and !raiz -> der)){
                 raizDer = raiz -> der;
                 // si hay elemento a la derecha de la raiz
-                if(raizDer and (raizDer -> tipo == 2 or (raizDer -> tipo == 3 and raiz -> tipo == 1))){
+                if(raizDer and raizDer -> tipo == 3 and raiz -> tipo == 1){
                     aux -> izq = ptr -> der;
                     ptr -> der = aux;
                 }else{
