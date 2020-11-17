@@ -46,13 +46,13 @@ int main(){
             if(aux -> tipo == 1 or (!raiz -> izq and !raiz -> der)){
                 raizDer = raiz -> der;
                 // si hay elemento a la derecha de la raiz
-                if(raizDer and (raizDer -> tipo == 2 or (raizDer -> tipo == 3 and raiz -> tipo == 1))){
-                    aux -> izq = ptr -> der;
+                /*if(raizDer and raizDer -> tipo == 3 and raiz -> tipo == 1 and aux->tipo== 2){
+                    aux -> izq = ptr -> der; // este if se puede comentar
                     ptr -> der = aux;
-                }else{
+                }else{*/
                     aux -> izq = raiz;
                     raiz = aux;
-                }
+               // }
             }else{
                 while(ptr){
                     if(!ptr -> der){
@@ -145,17 +145,8 @@ void postOrden(nodo *ptrNodo){
                     replaceNodo(resultado, ptrNodo);
                     break;
             }
-            //reinicia el contador
-            digitos = 0;
         }
     }
-}
-
-// convierte strings a integers
-int toInt(string s){
-    int a;
-    try{ a = stoi(s); } catch (...){}
-    return a;
 }
 
 // reemplaza el nodo
