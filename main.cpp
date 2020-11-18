@@ -16,16 +16,19 @@ float resultado;
 
 int main(){
     ifstream datos("datos.txt");
+    if(!datos){
+        cout << "No se encontro datos.txt";
+        return 0;
+    }
     nodo *raiz,*ptr,*aux;
     raiz = NULL;
+    string concatStr;
     char dataChar;
     datos >> dataChar;
-    string concatStr;
-    cout << endl << "Datos leidos: ";
+    cout << "Datos leidos: ";
 
     while (!datos.eof()){
         aux = new nodo;
-        // concatena chars hasta que encuentre un operador o se termine de leer el archivo
         concatStr.clear();
         do{
             concatStr += dataChar;
@@ -61,11 +64,18 @@ int main(){
         }
     }
 
-    cout << endl;
     datos.close();
-    cout << "Resultado con recorrido postOrden: ";
+    cout << endl;
+
     postOrden(raiz);
-    cout << raiz -> contenido << endl;
+    if(raiz){
+        cout << "Resultado con recorrido postOrden: ";
+        cout << raiz -> contenido;
+    }
+    else{
+        cout << "No se encontraron operaciones.";
+    }
+
     return 0;
 }
 
