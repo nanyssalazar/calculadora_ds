@@ -16,7 +16,7 @@ float resultado;
 
 int main(){
     ifstream datos("datos.txt");
-    nodo *raiz,*ptr,*aux, *raizDer;
+    nodo *raiz,*ptr,*aux;
     raiz = NULL;
     char dataChar;
     datos >> dataChar;
@@ -41,13 +41,10 @@ int main(){
         }
         else{
             ptr = raiz;
-            // si es suma, resta o la raiz no tiene elementos a los lados
             if(aux -> tipo < 3 or (!raiz -> izq and !raiz -> der))
             {
-                raizDer = raiz -> der;
-                // si hay elemento a la derecha de la raiz
-                if(raizDer and (raizDer -> tipo == 3 or aux->tipo >= raizDer->tipo) and raiz -> tipo == 1 and aux->tipo== 2){
-                    aux -> izq = ptr -> der; // este if se puede comentar
+                if(raiz -> der and raiz -> tipo == 1 and aux -> tipo == 2){
+                    aux -> izq = ptr -> der;
                     ptr -> der = aux;
                 }
                 else{
