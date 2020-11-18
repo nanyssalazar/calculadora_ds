@@ -44,7 +44,7 @@ int main(){
             if(aux -> tipo < 3 or (!raiz -> izq and !raiz -> der)){
                 raizDer = raiz -> der;
                 // si hay elemento a la derecha de la raiz
-                if(raizDer and raizDer -> tipo == 3 and raiz -> tipo == 1 and aux->tipo== 2){
+                if(raizDer and (raizDer -> tipo == 3 or aux->tipo >= raizDer->tipo) and raiz -> tipo == 1 and aux->tipo== 2){
                     aux -> izq = ptr -> der; // este if se puede comentar
                     ptr -> der = aux;
                 }else{
@@ -78,19 +78,14 @@ int main(){
 }
 
 void asigna_tipo(nodo *ptrNodo){
-    // str a char para efectuar switch
-    char contenido = ptrNodo -> contenido[0];
-    switch(contenido){
-        case '+':
-        case '-':
-            ptrNodo -> tipo = 1;
-            break;
-        case '*':
-        case '/':
-            ptrNodo -> tipo = 2;
-            break;
-        default:
-            ptrNodo -> tipo = 3;
+    if (ptrNodo->contenido == "+" or ptrNodo->contenido == "-" and !ptrNodo -> contenido[1]){
+        ptrNodo->tipo = 1;
+    }
+    else if (ptrNodo -> contenido =="*" or ptrNodo -> contenido=="/"){
+        ptrNodo->tipo = 2;
+    }
+    else{
+        ptrNodo -> tipo = 3;
     }
 }
 
