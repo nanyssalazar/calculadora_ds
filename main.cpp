@@ -16,16 +16,19 @@ float resultado;
 
 int main(){
     ifstream datos("datos.txt");
-    nodo *raiz,*ptr,*aux, *raizDer;
+    if(!datos){
+        cout << "No se encontro datos.txt";
+        return 0;
+    }
+    nodo *raiz,*ptr,*aux;
     raiz = NULL;
+    string concatStr;
     char dataChar;
     datos >> dataChar;
-    string concatStr;
-    cout << endl << "Datos leidos: ";
+    cout << "Datos leidos: ";
 
     while (!datos.eof()){
         aux = new nodo;
-        // concatena chars hasta que encuentre un operador o se termine de leer el archivo
         concatStr.clear();
         do{
             concatStr += dataChar;
@@ -38,42 +41,41 @@ int main(){
 
         if(!raiz){
             raiz=aux;
-        }else{
+        }
+        else{
             ptr = raiz;
-            // si es suma, resta o la raiz no tiene elementos a los lados
-            if(aux -> tipo < 3 or (!raiz -> izq and !raiz -> der)){
-                raizDer = raiz -> der;
-                // si hay elemento a la derecha de la raiz
-                if(raizDer and (raizDer -> tipo == 3 or aux->tipo >= raizDer->tipo) and raiz -> tipo == 1 and aux->tipo== 2){
-                    aux -> izq = ptr -> der; // este if se puede comentar
+            if(aux -> tipo < 3 or (!raiz -> izq and !raiz -> der))
+            {
+                if(raiz -> der and raiz -> tipo == 1 and aux -> tipo == 2){
+                    aux -> izq = ptr -> der;
                     ptr -> der = aux;
-                }else{
+                }
+                else{
                     aux -> izq = raiz;
                     raiz = aux;
                }
-            }else{
-                while(ptr){
-                    if(!ptr -> der){
-                        ptr -> der = aux;
-                        break;
-                    // si el elemento a la derecha es un numero
-                    }else if(ptr -> der -> tipo == 3 and aux->tipo>ptr->der->tipo){
-                        aux -> izq = ptr -> der;
-                        ptr -> der = aux;
-                        break;
-                    }else{
-                        ptr = ptr -> der;
-                    }
+            }
+            else{
+                while(ptr != aux){
+                    if(!ptr -> der){ptr -> der = aux;}
+                    ptr = ptr -> der;
                 }
             }
         }
     }
 
-    cout << endl;
     datos.close();
-    cout << "Resultado con recorrido postOrden: ";
+    cout << endl;
+
     postOrden(raiz);
-    cout << raiz -> contenido << endl;
+    if(raiz){
+        cout << "Resultado con recorrido postOrden: ";
+        cout << raiz -> contenido;
+    }
+    else{
+        cout << "No se encontraron operaciones.";
+    }
+
     return 0;
 }
 
@@ -111,8 +113,7 @@ void postOrden(nodo *ptrNodo){
                     replaceNodo(resultado, ptrNodo);
                     break;
                 case '/':
-                    if (!ptrNodo->der->der) { resultado = izq / der; }
-                    else { resultado = der / izq; }
+                    resultado = izq / der;
                     replaceNodo(resultado, ptrNodo);
                     break;
             }
